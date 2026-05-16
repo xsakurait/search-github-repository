@@ -1,5 +1,5 @@
 export async function fetchRepositories(keyword: string) {
-  const response = await fetch(`/api/github?q=${encodeURIComponent(keyword)}`);
+  const response = await fetch(`/api/github/search?q=${encodeURIComponent(keyword)}`);
 
   if (!response.ok) {
     throw new Error("repositories fetch failed");
