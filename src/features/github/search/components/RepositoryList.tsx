@@ -1,12 +1,15 @@
 import RepositoryCard from "./RepositoryCard";
 
 import { Repository } from "../types/repository";
+import Pagenation from "./Pagenation";
 
 type Props = {
   repositories: Repository[];
+  page: number;
+  setPage: (page: number) => void;
 };
 
-export default function RepositoryList({ repositories }: Props) {
+export default function RepositoryList({ repositories, page, setPage }: Props) {
   if (repositories.length === 0) {
     return <div>repository not found</div>;
   }
@@ -19,6 +22,7 @@ export default function RepositoryList({ repositories }: Props) {
     "
     >
       <RepositoryCard repositories={repositories} />
+      <Pagenation pages={page} setPage={setPage} repositories={repositories.length}/>
     </div>
-  );
-}
+  )
+};

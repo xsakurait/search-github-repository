@@ -1,10 +1,15 @@
 // 最初に何も表示されない->不自然 特に指定がないため人気順でのリポジトリ表示
-export async function fetchDefaultRepositories() {
-  const response = await fetch(`/api/github?q=stars:>&sort=stars&order=desc`, {
-    headers: {
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+// &page=1&per_page=10->pagenation
+
+export async function fetchDefaultRepositories(page: number) {
+  const response = await fetch(
+    `/api/github?q=stars:>&sort=stars&order=desc&page=${page}&per_page=10`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     throw new Error("repositories fetch failed");
@@ -13,12 +18,15 @@ export async function fetchDefaultRepositories() {
   return response.json();
 }
 
-export async function fetchRepository(keyword: string) {
-  const response = await fetch(`/api/github?q=${encodeURIComponent(keyword)}`, {
-    headers: {
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+export async function fetchRepository(keyword: string, page: number) {
+  const response = await fetch(
+    `/api/github?q=${encodeURIComponent(keyword)}&page=${page}&per_page=10`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     throw new Error("repositories fetch failed");
