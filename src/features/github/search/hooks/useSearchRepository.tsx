@@ -9,6 +9,7 @@ export const useSearchRepository = () => {
     [],
   );
   const [repository, setRepository] = useState<Repository[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -19,6 +20,7 @@ export const useSearchRepository = () => {
       );
       const data: SearchRepositoriesResponse = await res.json();
       setDefaultRepositories(data.items);
+      setTotalCount(10); // 初期表示は1ページのみ（10件）
     } catch (err) {
       console.error(err);
     }
@@ -37,6 +39,7 @@ export const useSearchRepository = () => {
       );
       const data: SearchRepositoriesResponse = await res.json();
       setRepository(data.items);
+      setTotalCount(data.total_count); // 検索時は全体のヒット件数を設定
     } catch (err) {
       console.error(err);
       setError("リポジトリ取得に失敗しました");
@@ -48,6 +51,7 @@ export const useSearchRepository = () => {
   return {
     defaultRepositories,
     repository,
+    totalCount,
     loading,
     error,
     search,

@@ -9,13 +9,18 @@ export async function GET(request: NextRequest) {
     return Response.json({ message: "Owner and repo required" }, { status: 400 });
   }
 
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+  };
+
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
+
   const response = await fetch(
     `https://api.github.com/repos/${owner}/${repo}`,
     {
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-      },
+      headers,
       next: {
         revalidate: 60,
       },

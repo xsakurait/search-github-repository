@@ -7,9 +7,10 @@ type Props = {
   repositories: Repository[];
   page: number;
   setPage: (page: number) => void;
+  totalCount: number;
 };
 
-export default function RepositoryList({ repositories, page, setPage }: Props) {
+export default function RepositoryList({ repositories, page, setPage, totalCount }: Props) {
   if (repositories.length === 0) {
     return <div>repository not found</div>;
   }
@@ -22,7 +23,7 @@ export default function RepositoryList({ repositories, page, setPage }: Props) {
     "
     >
       <RepositoryCard repositories={repositories} />
-      <Pagenation pages={page} setPage={setPage} repositories={repositories.length}/>
+      <Pagenation pages={page} setPage={setPage} repositories={totalCount}/>
     </div>
   )
 };

@@ -24,9 +24,21 @@ const SuspenseWrapper = ({
 };
 
 export default function Page() {
+  const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
-  const { defaultRepositories, repository, loading, error, search } =
+  const { defaultRepositories, repository, totalCount, loading, error, search } =
     useSearchRepository();
+
+  const handleSearch = (newKeyword: string) => {
+    setKeyword(newKeyword);
+    setPage(1);
+    search(newKeyword, 1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    search(keyword, newPage);
+  };
 
   return (
     <main
@@ -37,7 +49,7 @@ export default function Page() {
         py-10"
     >
       <h1 className="text-3xl font-bold mb-8">Github search repository</h1>
-      <SearchForm onSearch={search}></SearchForm>
+      <SearchForm onSearch={handleSearch}></SearchForm>
 
       {error && (
         <div
@@ -58,7 +70,10 @@ export default function Page() {
           <RepositoryList
             repositories={
               repository.length > 0 ? repository : defaultRepositories
-            } page={page} setPage={setPage}
+            }
+            page={page}
+            setPage={handlePageChange}
+            totalCount={totalCount}
           />
         </SuspenseWrapper>
       </Suspense>

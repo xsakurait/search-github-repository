@@ -11,11 +11,16 @@ export async function GET() {
   url.searchParams.set("page", "1");
   url.searchParams.set("per_page", "10");
 
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+  };
+
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
+
   const response = await fetch(url.toString(), {
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-    },
+    headers,
     next: {
       revalidate: 60,
     },

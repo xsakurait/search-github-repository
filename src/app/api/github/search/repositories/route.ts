@@ -18,11 +18,16 @@ export async function GET(request: NextRequest) {
   url.searchParams.set("page", page);
   url.searchParams.set("per_page", perPage);
 
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+  };
+
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
+
   const response = await fetch(url.toString(), {
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-    },
+    headers,
     next: {
       revalidate: 60,
     },
