@@ -3,11 +3,11 @@
 import SearchForm from "@/src/features/github/search/components/SearchForm";
 import Loading from "./loading";
 
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { useSearchRepository } from "@/src/features/github/search/hooks/useSearchRepository";
 
 const RepositoryList = lazy(
-  () => import("../../../features/github/search/components/RepositoryList"),
+  () => import("@/src/features/github/search/components/RepositoryList"),
 );
 
 const SuspenseWrapper = ({
@@ -24,8 +24,10 @@ const SuspenseWrapper = ({
 };
 
 export default function Page() {
+  const [page, setPage] = useState(1);
   const { defaultRepositories, repository, loading, error, search } =
     useSearchRepository();
+
   return (
     <main
       className="
@@ -56,7 +58,7 @@ export default function Page() {
           <RepositoryList
             repositories={
               repository.length > 0 ? repository : defaultRepositories
-            }
+            } page={page} setPage={setPage}
           />
         </SuspenseWrapper>
       </Suspense>
