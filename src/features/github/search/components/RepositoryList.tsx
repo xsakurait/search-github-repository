@@ -18,9 +18,7 @@ export default function RepositoryList({ repositories }: Props) {
       gap-4
     "
     >
-      {repositories.map((repository) => (
-        <RepositoryCard key={repository.id} repository={repository} />
-      ))}
+      <RepositoryCard repositories={repositories} />
     </div>
   );
 }

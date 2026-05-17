@@ -1,27 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { fetchRepositories } from "../api/githubApi";
+import { fetchDefaultRepositories, fetchRepository } from "../api/githubApi";
 
 import { Repository, SearchRepositoriesResponse } from "../types/repository";
 
 export function useSearchRepository() {
-  const [repositories, setRepositories] = useState<Repository[]>([]);
-
+  const [defaultRepositories, setDefaultRepositories] = useState<Repository[]>([]);
+  const [repository, setRepository] = useState<Repository[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
 
+  const initialize = useCallback(async () => {
+    const data = await fetchDefaultRepositories();
+    setDefaultRepositories(data.items);
+  }, []);
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
   async function search(keyword: string) {
     try {
       setLoading(true);
 
       setError("");
-
-      const data: SearchRepositoriesResponse = await fetchRepositories(keyword);
-
-      setRepositories(data.items);
+      const data: SearchRepositoriesResponse = await fetchRepository(keyword);
+      setRepository(data.items);
     } catch (error) {
       console.error(error);
 
@@ -32,7 +36,8 @@ export function useSearchRepository() {
   }
 
   return {
-    repositories,
+    defaultRepositories,
+    repository,
     loading,
     error,
     search,

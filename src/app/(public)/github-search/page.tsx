@@ -1,16 +1,22 @@
 "use client";
 
-import SearchForm from "../../../features/github/search/components/SearchForm";
+import SearchForm from "@/src/features/github/search/components/SearchForm";
 import Loading from "./loading";
 
 import { lazy, Suspense } from "react";
-import { useSearchRepository } from "../../../features/github/search/hooks/useSearchRepository";
+import { useSearchRepository } from "@/src/features/github/search/hooks/useSearchRepository";
 
 const RepositoryList = lazy(
-  () => import("../../../features/github/search/components/RepositoryList")
+  () => import("../../../features/github/search/components/RepositoryList"),
 );
 
-const SuspenseWrapper = ({ loading, children }: { loading: boolean, children: React.ReactNode }) => {
+const SuspenseWrapper = ({
+  loading,
+  children,
+}: {
+  loading: boolean;
+  children: React.ReactNode;
+}) => {
   if (loading) {
     throw new Promise(() => {});
   }
@@ -18,7 +24,8 @@ const SuspenseWrapper = ({ loading, children }: { loading: boolean, children: Re
 };
 
 export default function Page() {
-  const { repositories, loading, error, search } = useSearchRepository();
+  const { defaultRepositories, repository, loading, error, search } =
+    useSearchRepository();
   return (
     <main
       className="
@@ -46,7 +53,11 @@ export default function Page() {
 
       <Suspense fallback={<Loading />}>
         <SuspenseWrapper loading={loading}>
-          <RepositoryList repositories={repositories} />
+          <RepositoryList
+            repositories={
+              repository.length > 0 ? repository : defaultRepositories
+            }
+          />
         </SuspenseWrapper>
       </Suspense>
     </main>
