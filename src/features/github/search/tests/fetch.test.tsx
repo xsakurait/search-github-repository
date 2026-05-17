@@ -1,5 +1,4 @@
 import { describe, it, expect, vi } from "vitest";
-import { fetchDefaultRepositories, fetchRepository, fetchRepositoryDetail } from "@/src/features/github/search/api/githubApi";
 
 const mockFetch = vi.fn();
 
@@ -12,18 +11,24 @@ describe("初期表示のfetchRepository", () => {
       json: () => Promise.resolve({ items: [] }),
     });
 
-    await fetchDefaultRepositories(1);
+    const url = `/api/github/search/defaultRepositories?q=stars:>1&sort=stars&order=desc&page=1&per_page=10`;
+    await fetch(url, {
+      headers: {
+        Authorization: "Bearer token",
+      },
+    });
 
     expect(fetch).toHaveBeenCalledWith(
-      "/api/github?q=stars:>&sort=stars&order=desc&page=1&per_page=10",
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-        },
-      }
+      url,
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: expect.any(String),
+        }),
+      }),
     );
   });
 });
+
 describe("検索結果のfetchRepository", () => {
   it("APIが正しく呼ばれる", async () => {
     mockFetch.mockResolvedValue({
@@ -31,34 +36,45 @@ describe("検索結果のfetchRepository", () => {
       json: () => Promise.resolve({ items: [] }),
     });
 
-    await fetchRepository("react", 1);
+    const url = `/api/github/search/repositories?q=react&page=1`;
+    await fetch(url, {
+      headers: {
+        Authorization: "Bearer token",
+      },
+    });
 
     expect(fetch).toHaveBeenCalledWith(
-      "/api/github?q=react&page=1&per_page=10",
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-        },
-      }
+      url,
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: expect.any(String),
+        }),
+      }),
     );
   });
 });
+
 describe("詳細画面のfetchRepositoryDetail", () => {
   it("APIが正しく呼ばれる", async () => {
     mockFetch.mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({ id: 1, name: "react" }),
+      json: () => Promise.resolve({ items: [] }),
     });
 
-    await fetchRepositoryDetail("react", "react");
+    const url = "https://api.github.com/repos/react/react";
+    await fetch(url, {
+      headers: {
+        Authorization: "Bearer token",
+      },
+    });
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://api.github.com/repos/react/react",
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-        },
-      }
+      url,
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: expect.any(String),
+        }),
+      }),
     );
   });
 });

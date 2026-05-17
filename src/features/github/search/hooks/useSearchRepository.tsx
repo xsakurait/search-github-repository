@@ -2,38 +2,48 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { fetchDefaultRepositories, fetchRepository } from "../api/githubApi";
-
 import { Repository, SearchRepositoriesResponse } from "../types/repository";
 
-export function useSearchRepository() {
-  const [defaultRepositories, setDefaultRepositories] = useState<Repository[]>([]);
+export const useSearchRepository = () => {
+  const [defaultRepositories, setDefaultRepositories] = useState<Repository[]>(
+    [],
+  );
   const [repository, setRepository] = useState<Repository[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const initialize = useCallback(async () => {
-    const data = await fetchDefaultRepositories();
-    setDefaultRepositories(data.items);
+    try {
+      const res = await fetch(
+        `/api/github/search/defaultRepositories?q=stars:>1&sort=stars&order=desc&page=1&per_page=10`,
+      );
+      const data: SearchRepositoriesResponse = await res.json();
+      setDefaultRepositories(data.items);
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
+
   useEffect(() => {
     initialize();
   }, [initialize]);
-  async function search(keyword: string) {
+
+  const search = async (keyword: string, page = 1) => {
     try {
       setLoading(true);
-
       setError("");
-      const data: SearchRepositoriesResponse = await fetchRepository(keyword);
+      const res = await fetch(
+        `/api/github/search/repositories?q=${keyword}&page=${page}`,
+      );
+      const data: SearchRepositoriesResponse = await res.json();
       setRepository(data.items);
-    } catch (error) {
-      console.error(error);
-
+    } catch (err) {
+      console.error(err);
       setError("リポジトリ取得に失敗しました");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return {
     defaultRepositories,
@@ -42,4 +52,4 @@ export function useSearchRepository() {
     error,
     search,
   };
-}
+};

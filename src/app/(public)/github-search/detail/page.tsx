@@ -1,5 +1,5 @@
 import RepositoryDetail from "@/src/features/github/search/components/RepositoryDetail";
-import { fetchRepositoryDetail } from "@/src/features/github/search/api/githubApi";
+import { Repository } from "@/src/features/github/search/types/repository";
 
 type Props = {
   searchParams: Promise<{
@@ -7,6 +7,7 @@ type Props = {
     repo?: string;
   }>;
 };
+
 export default async function Page({ searchParams }: Props) {
   const { owner, repo } = await searchParams;
 
@@ -14,7 +15,24 @@ export default async function Page({ searchParams }: Props) {
     return <div className="p-6">repository not found</div>;
   }
 
-  const detail = await fetchRepositoryDetail(owner, repo);
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}`,
+    {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      },
+      next: {
+        revalidate: 60,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    return <div className="p-6">repository not found</div>;
+  }
+
+  const detail: Repository = await response.json();
 
   return (
     <main
