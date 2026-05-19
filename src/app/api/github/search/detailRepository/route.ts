@@ -6,7 +6,10 @@ export async function GET(request: NextRequest) {
   const repo = searchParams.get("repo");
 
   if (!owner || !repo) {
-    return Response.json({ message: "Owner and repo required" }, { status: 400 });
+    return Response.json(
+      { message: "Owner and repo required" },
+      { status: 400 },
+    );
   }
 
   const headers: Record<string, string> = {
@@ -16,7 +19,7 @@ export async function GET(request: NextRequest) {
   if (process.env.GITHUB_TOKEN) {
     headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   }
-
+  // ISR
   const response = await fetch(
     `https://api.github.com/repos/${owner}/${repo}`,
     {

@@ -1,6 +1,9 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { Button } from "@/src/app/components/ui/button";
+import { Input } from "@/src/app/components/ui/input";
+import "@/src/app/globals.css";
 
 type Props = {
   onSearch: (keyword: string) => void;
@@ -11,11 +14,9 @@ export default function SearchForm({ onSearch }: Props) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     if (!keyword.trim()) {
       return;
     }
-
     onSearch(keyword);
   }
 
@@ -28,7 +29,7 @@ export default function SearchForm({ onSearch }: Props) {
         mb-8
       "
     >
-      <input
+      <Input
         type="text"
         value={keyword}
         onChange={(event) => setKeyword(event.target.value)}
@@ -43,7 +44,7 @@ export default function SearchForm({ onSearch }: Props) {
         "
       />
 
-      <button
+      <Button
         type="submit"
         className="
           bg-black
@@ -53,7 +54,7 @@ export default function SearchForm({ onSearch }: Props) {
         "
       >
         Search
-      </button>
+      </Button>
     </form>
   );
 }

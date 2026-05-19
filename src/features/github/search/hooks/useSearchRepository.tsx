@@ -23,7 +23,8 @@ export const useSearchRepository = () => {
       }
       const data: SearchRepositoriesResponse = await res.json();
       setDefaultRepositories(data.items);
-      setTotalCount(10); // 初期表示は1ページのみ（10件）
+      // 初期表示は1ページのみ（10件）、重くなるので
+      setTotalCount(10);
     } catch (err) {
       console.error(err);
       setError("初期リポジトリの取得に失敗しました");
@@ -46,7 +47,7 @@ export const useSearchRepository = () => {
       }
       const data: SearchRepositoriesResponse = await res.json();
       setRepository(data.items);
-      setTotalCount(data.total_count); // 検索時は全体のヒット件数を設定
+      setTotalCount(data.total_count);
     } catch (err) {
       console.error(err);
       setError("リポジトリ取得に失敗しました");

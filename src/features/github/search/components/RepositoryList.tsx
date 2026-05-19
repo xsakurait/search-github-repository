@@ -1,7 +1,7 @@
 import RepositoryCard from "./RepositoryCard";
-
 import { Repository } from "../types/repository";
 import Pagenation from "./Pagenation";
+import "@/src/app/globals.css";
 
 type Props = {
   repositories: Repository[];

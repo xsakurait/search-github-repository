@@ -1,4 +1,5 @@
 import { Repository } from "../types/repository";
+import "@/src/app/globals.css";
 
 type Props = {
   repository: Repository;
@@ -56,8 +57,12 @@ export default function RepositoryDetail({ repository }: Props) {
       <div
         className="
         grid
-        grid-cols-2
+        grid-cols-4
         gap-6
+        py-8
+        border-y
+        border-gray-100
+        text-center
       "
       >
         <div>
@@ -76,7 +81,7 @@ export default function RepositoryDetail({ repository }: Props) {
             font-bold
           "
           >
-            {repository.stargazers_count}
+            {repository.stargazers_count.toLocaleString()}
           </p>
         </div>
 
@@ -96,7 +101,7 @@ export default function RepositoryDetail({ repository }: Props) {
             font-bold
           "
           >
-            {repository.watchers_count}
+            {repository.watchers_count.toLocaleString()}
           </p>
         </div>
 
@@ -116,7 +121,7 @@ export default function RepositoryDetail({ repository }: Props) {
             font-bold
           "
           >
-            {repository.forks_count}
+            {repository.forks_count.toLocaleString()}
           </p>
         </div>
 
@@ -136,15 +141,15 @@ export default function RepositoryDetail({ repository }: Props) {
             font-bold
           "
           >
-            {repository.open_issues_count}
+            {repository.open_issues_count.toLocaleString()}
           </p>
         </div>
       </div>
-
-      <a
-        href={repository.html_url}
-        target="_blank"
-        className="
+      <div>
+        <a
+          href={repository.html_url}
+          target="_blank"
+          className="
           inline-block
           mt-8
           bg-black
@@ -153,9 +158,10 @@ export default function RepositoryDetail({ repository }: Props) {
           py-2
           rounded
         "
-      >
-        Open GitHub
-      </a>
+        >
+          Open GitHub
+        </a>
+      </div>
     </div>
   );
 }

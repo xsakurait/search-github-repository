@@ -1,5 +1,6 @@
 import RepositoryDetail from "@/src/features/github/search/components/RepositoryDetail";
 import { Repository } from "@/src/features/github/search/types/repository";
+import "@/src/app/globals.css";
 
 type Props = {
   searchParams: Promise<{

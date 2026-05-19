@@ -2,6 +2,7 @@
 
 import SearchForm from "@/src/features/github/search/components/SearchForm";
 import Loading from "./loading";
+import "@/src/app/globals.css";
 
 import { lazy, Suspense, useState } from "react";
 import { useSearchRepository } from "@/src/features/github/search/hooks/useSearchRepository";

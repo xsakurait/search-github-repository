@@ -14,7 +14,9 @@ export async function GET(request: NextRequest) {
 
   const url = new URL("https://api.github.com/search/repositories");
 
-  url.searchParams.set("q", q);
+  url.searchParams.set("q", "stars:>1");
+  url.searchParams.set("sort", "stars");
+  url.searchParams.set("order", "desc");
   url.searchParams.set("page", page);
   url.searchParams.set("per_page", perPage);
 
@@ -26,6 +28,7 @@ export async function GET(request: NextRequest) {
     headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   }
 
+  // ISR
   const response = await fetch(url.toString(), {
     headers,
     next: {
