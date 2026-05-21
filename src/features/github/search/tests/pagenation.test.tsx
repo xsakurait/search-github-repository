@@ -14,7 +14,7 @@ describe("Pagination", () => {
       />
     );
 
-    const button = screen.getByRole("button", { name: /next/i });
+    const button = screen.getByLabelText("Go to next page");
     fireEvent.click(button);
 
     expect(setPage).toHaveBeenCalledWith(2);

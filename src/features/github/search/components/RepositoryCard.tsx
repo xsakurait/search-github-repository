@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Repository } from "../types/repository";
+import { getLanguageIconSrc } from "../utils/languageIcon";
 import {
   Card,
   CardContent,
@@ -34,8 +36,15 @@ export default function RepositoryCard({ repositories }: Props) {
                   {repository.full_name}
                 </h2>
 
-                <p className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full inline-block mt-1.5">
-                  {repository.language || "Unknown"}
+                <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-600">
+                  <Image
+                    src={getLanguageIconSrc(repository.language)}
+                    alt={repository.language ?? "Unknown"}
+                    width={16}
+                    height={16}
+                    className="h-4 w-4"
+                  />
+                  {repository.language ?? "Unknown"}
                 </p>
               </CardTitle>
             </CardHeader>

@@ -16,5 +16,6 @@ export type Repository = {
 };
 
 export type SearchRepositoriesResponse = {
+  total_count: number;
   items: Repository[];
 };

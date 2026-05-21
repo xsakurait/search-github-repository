@@ -6,23 +6,20 @@ import { Input } from "@/src/app/components/ui/input";
 import "@/src/app/globals.css";
 
 type Props = {
-  onSearch: (keyword: string) => void;
+  setKeyword: (keywords: string) => void;
+  keyword: string;
+  onSearch: (keyword: string, page?: number) => Promise<void>;
 };
 
-export default function SearchForm({ onSearch }: Props) {
-  const [keyword, setKeyword] = useState("");
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+export default function SearchForm({ keyword, setKeyword, onSearch }: Props) {
+  const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!keyword.trim()) {
-      return;
-    }
-    onSearch(keyword);
-  }
+    await onSearch(keyword, 1);
+  };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSearch}
       className="
         flex
         gap-3
@@ -32,7 +29,7 @@ export default function SearchForm({ onSearch }: Props) {
       <Input
         type="text"
         value={keyword}
-        onChange={(event) => setKeyword(event.target.value)}
+        onChange={(ev) => setKeyword(ev.target.value)}
         placeholder="
           リポジトリ検索
         "

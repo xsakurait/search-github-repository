@@ -1,83 +1,77 @@
 "use client";
 
 import SearchForm from "@/src/features/github/search/components/SearchForm";
+import FavoriteFolderList from "@/src/features/github/search/components/FavoriteFolderList";
 import Loading from "./loading";
 import "@/src/app/globals.css";
 
 import { lazy, Suspense, useState } from "react";
-import { useSearchRepository } from "@/src/features/github/search/hooks/useSearchRepository";
+import { useSearchRepository } from "@/src/features/github/search/context/SearchRepositoryContext";
 
 const RepositoryList = lazy(
   () => import("@/src/features/github/search/components/RepositoryList"),
 );
 
-const SuspenseWrapper = ({
-  loading,
-  children,
-}: {
-  loading: boolean;
-  children: React.ReactNode;
-}) => {
-  if (loading) {
-    throw new Promise(() => {});
-  }
-  return <>{children}</>;
-};
-
 export default function Page() {
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
-  const { defaultRepositories, repository, totalCount, loading, error, search } =
-    useSearchRepository();
+  const {
+    activeView,
+    setActiveView,
+    defaultRepositories,
+    repository,
+    totalCount,
+    errorMessage,
+    search,
+    favoriteRepositories,
+  } = useSearchRepository();
 
-  const handleSearch = (newKeyword: string) => {
-    setKeyword(newKeyword);
+  const handleSearch = async (newKeyword: string) => {
     setPage(1);
-    search(newKeyword, 1);
+    await search(newKeyword, 1);
   };
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = async (newPage: number) => {
     setPage(newPage);
-    search(keyword, newPage);
+    await search(keyword, newPage);
   };
+
+  if (activeView === "favorites") {
+    return (
+      <div className="max-w-7xl py-4">
+        <FavoriteFolderList
+          favorites={favoriteRepositories}
+          onBack={() => setActiveView("search")}
+        />
+      </div>
+    );
+  }
 
   return (
-    <main
-      className="
-        max-w-7xl 
-        mx-auto 
-        px-6 
-        py-10"
-    >
-      <h1 className="text-3xl font-bold mb-8">Github search repository</h1>
-      <SearchForm onSearch={handleSearch}></SearchForm>
+    <div className="max-w-7xl py-4">
+      <h1 className="mb-8 text-3xl font-bold">Github search repository</h1>
+      <SearchForm
+        keyword={keyword}
+        setKeyword={setKeyword}
+        onSearch={handleSearch}
+      />
 
-      {error && (
-        <div
-          className="
-          bg-red-100
-          text-red-700
-          p-4
-          rounded
-          mb-6
-        "
-        >
-          {error}
+      {errorMessage && (
+        <div className="mb-6 rounded bg-red-100 p-4 text-red-700">
+          {errorMessage}
         </div>
       )}
 
       <Suspense fallback={<Loading />}>
-        <SuspenseWrapper loading={loading}>
-          <RepositoryList
-            repositories={
-              repository.length > 0 ? repository : defaultRepositories
-            }
-            page={page}
-            setPage={handlePageChange}
-            totalCount={totalCount}
-          />
-        </SuspenseWrapper>
+        <RepositoryList
+          repositories={
+            repository.length > 0 ? repository : defaultRepositories
+          }
+          page={page}
+          setPage={handlePageChange}
+          totalCount={totalCount}
+        />
       </Suspense>
-    </main>
+    </div>
   );
 }

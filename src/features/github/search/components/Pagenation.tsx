@@ -21,9 +21,9 @@ export default function Pagenation({ pages, setPage, repositories }: Props) {
     <Pagination className="flex items-center justify-center gap-6 pt-8 w-full whitespace-nowrap">
       <PaginationContent>
         <PaginationPrevious
-          className="cn(px-6 py-3 border rounded pages===1&&disabled:opacity-30 text-lg)"
+          className={`px-6 py-3 border rounded text-lg ${pages <= 1 ? "pointer-events-none opacity-30" : ""}`}
           onClick={() => {
-            if (pages < totalPages) {
+            if (pages > 1) {
               setPage(pages - 1);
             }
           }}
@@ -36,7 +36,7 @@ export default function Pagenation({ pages, setPage, repositories }: Props) {
         </PaginationItem>
 
         <PaginationNext
-          className="px-6 py-3 border rounded pages>=totalPages&&disabled:opacity-30 text-lg"
+          className={`px-6 py-3 border rounded text-lg ${pages >= totalPages ? "pointer-events-none opacity-30" : ""}`}
           onClick={() => {
             if (pages < totalPages) {
               setPage(pages + 1);

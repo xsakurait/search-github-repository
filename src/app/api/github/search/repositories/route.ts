@@ -14,12 +14,13 @@ export async function GET(request: NextRequest) {
 
   const url = new URL("https://api.github.com/search/repositories");
 
-  url.searchParams.set("q", "stars:>1");
+  url.searchParams.set("q", q);
   url.searchParams.set("sort", "stars");
   url.searchParams.set("order", "desc");
   url.searchParams.set("page", page);
   url.searchParams.set("per_page", perPage);
 
+  // AIによる修正
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
   };
