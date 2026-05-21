@@ -19,9 +19,9 @@ npm run dev
 - Zustand->repositoriesはすべての画面で使用しているなどバケツリレーが起きにくいと感じ現在は使用していない
 - suspenseを導入しスケルトンコードを使用していることで、接続しどのような要素を読み込んでいるかユーザーに伝える
 
-## routehandlerを選定し,serveraction/clientactionを選定しない理由
-- actionのほうはform更新等で用いることが多く、fetchで用いるとコードが複雑になるため
-- reactでSWRを用いていたため導入したいため
+## routehandler,serveraction使い分け
+- routehandler fetchを使う場合やフォーム関係でもＰＯＳＴしなくＧＥＴリクエストの場合使用
+- serveraction お気に入り登録した際POSTリクエストのため使用
 
 
 ## 苦労した点
@@ -30,4 +30,5 @@ npm run dev
 
 ## AI使用に関して
 ### 使用したAI　gemini 3 flash
-### 用途　読み取り実行権限等のOS関係の部分等に関するシステム側のエラーの修正,CI、デザインの修正
+### 用途　読み取り実行権限等のOS関係の部分等に関するシステム側のエラーの修正、デザインの修正
+### 工夫した点　自分のローカル上のプロジェクトより上のファイルは触らないようにmdファイルで指定
