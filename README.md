@@ -27,7 +27,9 @@ npm run dev
 ## 苦労した点
 - デザイン周りの調整
 - 自分が使用したいと思う機能、アプリとして実用性が高いものであり他アプリと似たように寄せる点
-- prismaClientがversion7だと使用できないエラーに時間がかかり、version6にダウングレード
+- prismaClientがversion7だと使用できないエラーに時間がかかり、version6にダウングレード->修正ができたためupdate
+- お気に入り登録の機能を用いるためのログイン機能->github,googleのリダイレクトurl等の問題で長時間試行錯誤
+- 
 
 ## AI使用に関して
 - 使用したAI　gemini 3 flash
