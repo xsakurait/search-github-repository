@@ -9,10 +9,10 @@ import { lazy, Suspense, useState } from "react";
 import { useSearchRepository } from "@/src/features/github/search/context/SearchRepositoryContext";
 
 const RepositoryList = lazy(
-  () => import("@/src/features/github/search/components/RepositoryList"),
+  () => import("@/src/features/github/search/components/RepositoryList")
 );
 
-export default function Page() {
+export default function GitHubSearchClient() {
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
   const {
@@ -35,11 +35,6 @@ export default function Page() {
     setPage(newPage);
     await search(keyword, newPage);
   };
-
-  // 初期ロード時、データが無い場合はスケルトン表示
-  if (!repository.length && !defaultRepositories.length) {
-    return <Loading />;
-  }
 
   if (activeView === "favorites") {
     return (
@@ -69,9 +64,7 @@ export default function Page() {
 
       <Suspense fallback={<Loading />}>
         <RepositoryList
-          repositories={
-            repository.length > 0 ? repository : defaultRepositories
-          }
+          repositories={repository.length > 0 ? repository : defaultRepositories}
           page={page}
           setPage={handlePageChange}
           totalCount={totalCount}

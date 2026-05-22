@@ -19,7 +19,7 @@ import {
 export type FavoriteWithItems = {
   id: number;
   name: string;
-  items: { id: number; itemId: string; itemTitle: string }[];
+  items: { id: number; itemId: number; itemTitle: string }[];
 };
 
 export type AppView = "search" | "favorites";

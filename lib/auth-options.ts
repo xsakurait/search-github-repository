@@ -11,8 +11,8 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
     GoogleProvider({
-      clientId: process.env.Google_CLIENT_ID ?? "",
-      clientSecret: process.env.Google_SECRET ?? "",
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
   ],
   session: {
@@ -69,6 +69,10 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/signin",
+    error: "/auth/error",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

@@ -15,7 +15,7 @@ export default function Header() {
 
   const openFavoritesView = () => {
     if (!session?.user) {
-      signIn("github");
+      router.push("/auth/signin");
       return;
     }
     setActiveView("favorites");
@@ -69,7 +69,7 @@ export default function Header() {
         ) : (
           <button
             type="button"
-            onClick={() => signIn("github")}
+            onClick={() => router.push("/auth/signin")}
             className="rounded bg-teal-600 px-3 py-1 text-sm text-white hover:bg-teal-700"
           >
             Github/Googleアカウントでログイン

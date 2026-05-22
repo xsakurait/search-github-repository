@@ -1,6 +1,7 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { FavoriteWithItems } from "../context/SearchRepositoryContext";
 
@@ -11,6 +12,7 @@ type Props = {
 
 export default function FavoriteFolderList({ favorites, onBack }: Props) {
   const { data: session } = useSession();
+  const router = useRouter();
 
   if (!session?.user) {
     return (
@@ -28,10 +30,10 @@ export default function FavoriteFolderList({ favorites, onBack }: Props) {
         </p>
         <button
           type="button"
-          onClick={() => signIn("github")}
-          className="rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
+          onClick={() => router.push("/auth/signin")}
+          className="rounded bg-teal-600 px-4 py-2 text-white hover:bg-teal-700 font-semibold shadow-sm"
         >
-          GitHubでログイン
+          ログインしてフォルダを表示
         </button>
       </div>
     );
@@ -74,7 +76,7 @@ export default function FavoriteFolderList({ favorites, onBack }: Props) {
                   {fav.items.map((item) => (
                     <li key={item.id}>
                       <a
-                        href={`https://github.com/${item.itemId}`}
+                        href={`https://github.com/${item.itemTitle}`}
                         target="_blank"
                         rel="noreferrer"
                         className="text-sm text-blue-600 hover:underline"

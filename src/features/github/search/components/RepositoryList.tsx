@@ -22,7 +22,7 @@ export default function RepositoryList({ repositories, page, setPage, totalCount
       gap-4
     "
     >
-      <RepositoryCard repositories={repositories} />
+      <RepositoryCard  repositories={repositories} />
       <Pagenation pages={page} setPage={setPage} repositories={totalCount}/>
     </div>
   )

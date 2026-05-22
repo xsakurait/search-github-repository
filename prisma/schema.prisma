@@ -29,8 +29,8 @@ model FavoriteItem{
   id Int @id @default(autoincrement())
   favoriteId Int
   favorite   Favorite @relation(fields: [favoriteId], references: [id], onDelete: Cascade)
-  itemId     String   // 外部の商品IDや記事ID
-  itemTitle  String   // 表示用のタイトル
+  itemId     Int   
+  itemTitle  String   
   createdAt  DateTime @default(now())
-
+  @@unique([favoriteId, itemId])
 }

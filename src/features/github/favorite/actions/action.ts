@@ -5,9 +5,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/prisma";
 
-export async function addItemToFavorite(
+export async function FavoriteAction(
   favoriteId: number,
-  itemId: string,
+  itemId: number,
   itemTitle: string,
 ) {
   const session = await getServerSession(authOptions);

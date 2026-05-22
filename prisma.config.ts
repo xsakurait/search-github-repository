@@ -1,7 +1,5 @@
-// prisma.config.ts があると CLI は .env を自動読み込みしない。
-// 接続 URL は schema.prisma の env("DATABASE_URL") + プロジェクト直下の .env / .env.local
 import { config } from "dotenv";
-import { defineConfig } from "prisma/config";
+import { defineConfig, env } from "prisma/config";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -14,5 +12,8 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
+  },
+  datasource: {
+    url: env("DATABASE_URL"),
   },
 });
