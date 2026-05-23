@@ -13,6 +13,7 @@ type Props = {
   pages: number;
   setPage: (page: number) => void;
   repositories: number;
+  isDefaulted?: boolean;
 };
 
 export default function Pagenation({ pages, setPage, repositories }: Props) {
@@ -37,10 +38,13 @@ export default function Pagenation({ pages, setPage, repositories }: Props) {
 
         <PaginationNext
           className={`px-6 py-3 border rounded text-lg ${pages >= totalPages ? "pointer-events-none opacity-30" : ""}`}
-          onClick={() => {
-            if (pages < totalPages) {
-              setPage(pages + 1);
+          onClick={(e) => {
+            if (pages >= totalPages) {
+              e.preventDefault();
+              return;
             }
+
+            setPage(pages + 1);
           }}
         >
           Next

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchRepository } from "@/src/features/github/search/context/SearchRepositoryContext";
+import { useSearchRepository } from "@/src/features/github/search/hooks/useSearchRepository";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

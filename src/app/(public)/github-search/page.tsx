@@ -6,7 +6,7 @@ import Loading from "./loading";
 import "@/src/app/globals.css";
 
 import { lazy, Suspense, useState } from "react";
-import { useSearchRepository } from "@/src/features/github/search/context/SearchRepositoryContext";
+import { useSearchRepository } from "@/src/features/github/search/hooks/useSearchRepository";
 
 const RepositoryList = lazy(
   () => import("@/src/features/github/search/components/RepositoryList"),
@@ -24,6 +24,7 @@ export default function Page() {
     errorMessage,
     search,
     favoriteRepositories,
+    loading,
   } = useSearchRepository();
 
   const handleSearch = async (newKeyword: string) => {
@@ -36,8 +37,8 @@ export default function Page() {
     await search(keyword, newPage);
   };
 
-  // 初期ロード時、データが無い場合はスケルトン表示
-  if (!repository.length && !defaultRepositories.length) {
+  // 初期ロード中、かつデータが無い場合のみスケルトン表示
+  if (loading && !repository.length && !defaultRepositories.length) {
     return <Loading />;
   }
 

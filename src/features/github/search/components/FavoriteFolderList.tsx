@@ -3,27 +3,21 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import { FavoriteWithItems } from "../context/SearchRepositoryContext";
+import {
+  FavoriteWithItems,
+} from "../hooks/useSearchRepository";
 
 type Props = {
   favorites: FavoriteWithItems[];
   onBack: () => void;
 };
 
-export default function FavoriteFolderList({ favorites, onBack }: Props) {
+export default function FavoriteFolderList({ favorites }: Props) {
   const { data: session } = useSession();
   const router = useRouter();
-
   if (!session?.user) {
     return (
       <div>
-        <button
-          type="button"
-          onClick={onBack}
-          className="mb-6 text-sm text-blue-600 hover:underline"
-        >
-          ← リポジトリ検索に戻る
-        </button>
         <h2 className="mb-4 text-2xl font-bold">マイフォルダ一覧</h2>
         <p className="mb-4 text-gray-600">
           お気に入りはログインユーザーごとに管理されています。
@@ -41,14 +35,6 @@ export default function FavoriteFolderList({ favorites, onBack }: Props) {
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={onBack}
-        className="mb-6 text-sm text-blue-600 hover:underline"
-      >
-        ← リポジトリ検索に戻る
-      </button>
-
       <h2 className="mb-6 text-2xl font-bold">マイフォルダ一覧</h2>
 
       {favorites.length === 0 ? (

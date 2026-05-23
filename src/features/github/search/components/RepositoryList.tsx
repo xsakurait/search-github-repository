@@ -10,10 +10,18 @@ type Props = {
   totalCount: number;
 };
 
-export default function RepositoryList({ repositories, page, setPage, totalCount }: Props) {
+export default function RepositoryList({
+  repositories,
+  page,
+  setPage,
+  totalCount,
+}: Props) {
   if (repositories.length === 0) {
     return <div>repository not found</div>;
   }
+
+  const totalPages = Math.ceil(totalCount / 10);
+  const showPagination = totalPages > 1;
 
   return (
     <div
@@ -22,8 +30,10 @@ export default function RepositoryList({ repositories, page, setPage, totalCount
       gap-4
     "
     >
-      <RepositoryCard  repositories={repositories} />
-      <Pagenation pages={page} setPage={setPage} repositories={totalCount}/>
+      <RepositoryCard repositories={repositories} />
+      {showPagination &&(
+        <Pagenation pages={page} setPage={setPage} repositories={totalCount} />
+      )}
     </div>
-  )
-};
+  );
+}

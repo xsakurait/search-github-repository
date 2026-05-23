@@ -1,9 +1,7 @@
 // 最初に何も表示されない->不自然 特に指定がないため人気順でのリポジトリ表示
 // &page=1&per_page=10->pagenation
 export async function GET() {
-  const url = new URL(
-    "https://api.github.com/search/repositories"
-  );
+  const url = new URL("https://api.github.com/search/repositories");
 
   url.searchParams.set("q", "stars:>1");
   url.searchParams.set("sort", "stars");
@@ -27,10 +25,7 @@ export async function GET() {
   });
 
   if (!response.ok) {
-    return Response.json(
-      { message: "GitHub API Error" },
-      { status: 500 }
-    );
+    return Response.json({ message: "GitHub API Error" }, { status: 500 });
   }
 
   const data = await response.json();
