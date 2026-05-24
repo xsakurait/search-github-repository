@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import useSWR from "swr";
 
 import { Repository, SearchRepositoriesResponse } from "../types/repository";
+import { useFavoriteStore } from "../../favorite/store/favoriteStore";
 
 export type FavoriteWithItems = {
   id: number;
@@ -23,18 +24,16 @@ const fetcher = async <T,>(url: string): Promise<T> => {
 };
 
 export function useSearchRepository() {
-  const [activeView, setActiveView] = useState<AppView>("search");
+  const activeView = useFavoriteStore((state) => state.activeView);
+  const setActiveView = useFavoriteStore((state) => state.setActiveView);
   const [repository, setRepository] = useState<Repository[]>([]);
   const [searchTotalCount, setSearchTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isMutating, setIsMutating] = useState(false);
-  const [favoriteRepositories, setFavoriteRepositories] = useState<
-    FavoriteWithItems[]
-  >([]);
   const { data: session } = useSession();
 
-  const { data, isLoading } = useSWR<SearchRepositoriesResponse>(
+  const { data } = useSWR<SearchRepositoriesResponse>(
     "/api/github/search/defaultRepositories",
     fetcher,
     {
@@ -94,7 +93,7 @@ export function useSearchRepository() {
       errorMessage,
       isMutating,
       search,
-      favoriteRepositories,
+      favoriteData,
     }),
     [
       activeView,
@@ -105,7 +104,7 @@ export function useSearchRepository() {
       errorMessage,
       isMutating,
       search,
-      favoriteRepositories,
+      favoriteData,
     ],
   );
 }

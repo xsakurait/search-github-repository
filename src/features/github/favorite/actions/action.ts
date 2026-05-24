@@ -1,9 +1,9 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache"; 
 
 export async function FavoriteAction(
   favoriteId: number,
@@ -25,11 +25,32 @@ export async function FavoriteAction(
     throw new Error("フォルダが見つかりません");
   }
 
-  await prisma.favoriteItem.create({
-    data: {
-      favoriteId,
-      itemId,
-      itemTitle,
+
+  // 1. すでにこのアイテムがお気に入り（FavoriteItem）に登録されているか調べる
+  const existingItem = await prisma.favoriteItem.findUnique({
+    where: {
+      favoriteId_itemId: {
+        favoriteId,
+        itemId,
+      },
     },
   });
+
+  if (existingItem) {
+    await prisma.favoriteItem.delete({
+      where: {
+        id: existingItem.id,
+      },
+    });
+  } else {
+    await prisma.favoriteItem.create({
+      data: {
+        favoriteId,
+        itemId,
+        itemTitle,
+      },
+    });
+  }
+
+  revalidatePath("/favorites");
 }

@@ -3,12 +3,10 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import {
-  FavoriteWithItems,
-} from "../hooks/useSearchRepository";
+import { FavoriteWithItems } from "../hooks/useSearchRepository";
 
 type Props = {
-  favorites: FavoriteWithItems[];
+  favorites: FavoriteWithItems[] | undefined;
   onBack: () => void;
 };
 
@@ -37,11 +35,11 @@ export default function FavoriteFolderList({ favorites }: Props) {
     <div>
       <h2 className="mb-6 text-2xl font-bold">マイフォルダ一覧</h2>
 
-      {favorites.length === 0 ? (
+      {favorites?.length === 0 ? (
         <p className="text-gray-600">フォルダがありません</p>
       ) : (
         <div className="space-y-6">
-          {favorites.map((fav) => (
+          {favorites?.map((fav) => (
             <section
               key={fav.id}
               className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"

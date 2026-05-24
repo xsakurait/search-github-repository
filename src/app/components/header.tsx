@@ -8,7 +8,7 @@ import { useState } from "react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { favoriteRepositories, setActiveView } = useSearchRepository();
+  const { favoriteData, setActiveView } = useSearchRepository();
   const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -107,10 +107,10 @@ export default function Header() {
                 <p className="text-xs text-gray-500">
                   お気に入りを見るにはログインしてください
                 </p>
-              ) : favoriteRepositories.length === 0 ? (
+              ) : favoriteData?.length === 0 ? (
                 <p className="text-xs text-gray-500">フォルダがありません</p>
               ) : (
-                favoriteRepositories.map((fav) => (
+                favoriteData?.map((fav) => (
                   <div key={fav.id} className="mb-4">
                     <div className="flex justify-between text-sm font-semibold text-gray-300">
                       <span>📁 {fav.name}</span>

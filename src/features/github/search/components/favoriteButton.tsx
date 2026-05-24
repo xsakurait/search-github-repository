@@ -1,11 +1,7 @@
 "use client";
-
 import { Star } from "lucide-react";
-
 import { Repository } from "../types/repository";
-
 import { FavoriteAction } from "../../favorite/actions/action";
-
 import { useFavoriteStore } from "../../favorite/store/favoriteStore";
 
 type Props = {
@@ -35,7 +31,7 @@ export default function FavoriteButton({ repository }: Props) {
     try {
       await FavoriteAction(1, repository.id, repository.full_name);
     } catch {
-      // rollback
+      // prismaに登録できなかった場合表示をもとに戻す
       if (isFavorite) {
         addFavorite({
           itemId: repository.id,

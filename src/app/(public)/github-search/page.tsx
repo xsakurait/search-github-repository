@@ -23,7 +23,7 @@ export default function Page() {
     totalCount,
     errorMessage,
     search,
-    favoriteRepositories,
+    favoriteData,
     loading,
   } = useSearchRepository();
 
@@ -46,7 +46,7 @@ export default function Page() {
     return (
       <div className="max-w-7xl py-4">
         <FavoriteFolderList
-          favorites={favoriteRepositories}
+          favorites={favoriteData}
           onBack={() => setActiveView("search")}
         />
       </div>
