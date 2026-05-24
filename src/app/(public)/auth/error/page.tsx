@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 function AuthErrorContent() {
   const router = useRouter();

@@ -20,10 +20,11 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user }) {
+      
       if (!user.email) {
         return false;
       }
-
+// データベースにログイン情報なければサインイン（新規登録）、あればサインアップ
       const dbUser = await prisma.user.upsert({
         where: { email: user.email },
         create: {
@@ -69,7 +70,15 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // ログインが成功したら、常にトップページ（http://localhost:3000/）にリダイレクトする設定
+      return baseUrl;
+
+      // もし特定のページ（例: /dashboard）にしたい場合は以下のように書きます
+      // return `${baseUrl}/dashboard`;
+    },
   },
+
   pages: {
     signIn: "/auth/signin",
     error: "/auth/error",
