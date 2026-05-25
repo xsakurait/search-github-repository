@@ -3,6 +3,8 @@ import { Star } from "lucide-react";
 import { Repository } from "../types/repository";
 import { FavoriteAction } from "../../favorite/actions/action";
 import { useFavoriteStore } from "../../favorite/store/favoriteStore";
+import { useEffect } from "react";
+import { useSearchRepository } from "../hooks/useSearchRepository";
 
 type Props = {
   repository: Repository;
@@ -10,13 +12,13 @@ type Props = {
 
 export default function FavoriteButton({ repository }: Props) {
   const favoriteIds = useFavoriteStore((state) => state.favoriteIds);
-
   const addFavorite = useFavoriteStore((state) => state.addFavorite);
-
   const removeFavorite = useFavoriteStore((state) => state.removeFavorite);
-
   const isFavorite = favoriteIds.includes(repository.id);
+  const { favoriteData } = useSearchRepository();
+  const setFavoriteIds = useFavoriteStore((state) => state.setFavoriteIds);
 
+  
   const handleClick = async () => {
     // optimistic UI
     if (isFavorite) {
@@ -42,7 +44,15 @@ export default function FavoriteButton({ repository }: Props) {
       }
     }
   };
-
+  useEffect(() => {
+    if (favoriteData && favoriteData.length > 0) {
+      const ids = favoriteData.flatMap((folder) =>
+        folder.items.map((item) => item.itemId)
+      );
+      setFavoriteIds(ids);
+    }
+  }, [favoriteData, setFavoriteIds]);
+  console.log(isFavorite);
   return (
     <button onClick={handleClick}>
       <Star
