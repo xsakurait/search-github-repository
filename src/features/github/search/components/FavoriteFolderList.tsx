@@ -2,21 +2,49 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import useSWR from "swr";
 
 import { FavoriteWithItems } from "../hooks/useSearchRepository";
+import { SearchRepositoriesResponse } from "../types/repository";
+import RepositoryCard from "./RepositoryCard";
 
 type Props = {
   favorites: FavoriteWithItems[] | undefined;
   onBack: () => void;
 };
 
-export default function FavoriteFolderList({ favorites }: Props) {
+const fetcher = async <T,>(url: string): Promise<T> => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed");
+  }
+  return response.json() as Promise<T>;
+};
+
+export default function FavoriteFolderList({ favorites, onBack }: Props) {
   const { data: session } = useSession();
   const router = useRouter();
+
+  const allTitles = favorites
+    ? Array.from(
+        new Set(favorites.flatMap((fav) => fav.items.map((item) => item.itemTitle)))
+      )
+    : [];
+
+  const titlesParam = allTitles.join(",");
+
+  // お気に入り詳細情報を取得
+  const { data, error, isLoading } = useSWR<SearchRepositoriesResponse>(
+    session?.user && titlesParam
+      ? `/api/github/favorite/details?titles=${encodeURIComponent(titlesParam)}`
+      : null,
+    fetcher
+  );
+
   if (!session?.user) {
     return (
       <div>
-        <h2 className="mb-4 text-2xl font-bold">マイフォルダ一覧</h2>
+        <h2 className="mb-4 text-2xl font-bold">お気に入り一覧</h2>
         <p className="mb-4 text-gray-600">
           お気に入りはログインユーザーごとに管理されています。
         </p>
@@ -25,56 +53,41 @@ export default function FavoriteFolderList({ favorites }: Props) {
           onClick={() => router.push("/auth/signin")}
           className="rounded bg-teal-600 px-4 py-2 text-white hover:bg-teal-700 font-semibold shadow-sm"
         >
-          ログインしてフォルダを表示
+          ログインしてお気に入りを表示
         </button>
       </div>
     );
   }
 
+  const repositories = data?.items || [];
+
   return (
     <div>
-      <h2 className="mb-6 text-2xl font-bold">マイフォルダ一覧</h2>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-bold">お気に入り一覧</h2>
+        <button
+          type="button"
+          onClick={onBack}
+          className="rounded bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300"
+        >
+          検索に戻る
+        </button>
+      </div>
 
-      {favorites?.length === 0 ? (
-        <p className="text-gray-600">フォルダがありません</p>
+      {allTitles.length === 0 ? (
+        <p className="text-gray-600">お気に入り登録されているリポジトリはありません。</p>
+      ) : isLoading ? (
+        <div className="flex justify-center py-8">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-t-transparent"></div>
+        </div>
+      ) : error ? (
+        <p className="text-red-500">お気に入り情報の取得に失敗しました。</p>
       ) : (
         <div className="space-y-6">
-          {favorites?.map((fav) => (
-            <section
-              key={fav.id}
-              className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-            >
-              <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-lg font-semibold">📁 {fav.name}</h3>
-                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-                  {fav.items.length} 件
-                </span>
-              </div>
-
-              {fav.items.length === 0 ? (
-                <p className="text-sm italic text-gray-500">
-                  アイテムがありません
-                </p>
-              ) : (
-                <ul className="space-y-2 border-l-2 border-gray-200 pl-4">
-                  {fav.items.map((item) => (
-                    <li key={item.id}>
-                      <a
-                        href={`https://github.com/${item.itemTitle}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-sm text-blue-600 hover:underline"
-                      >
-                        📄 {item.itemTitle}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
+          <RepositoryCard repositories={repositories} />
         </div>
       )}
     </div>
   );
 }
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchRepository } from "@/src/features/github/search/hooks/useSearchRepository";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -107,36 +107,7 @@ export default function Header() {
                 <p className="text-xs text-gray-500">
                   お気に入りを見るにはログインしてください
                 </p>
-              ) : favoriteData?.length === 0 ? (
-                <p className="text-xs text-gray-500">フォルダがありません</p>
-              ) : (
-                favoriteData?.map((fav) => (
-                  <div key={fav.id} className="mb-4">
-                    <div className="flex justify-between text-sm font-semibold text-gray-300">
-                      <span>📁 {fav.name}</span>
-                      <span className="rounded-full bg-gray-700 px-2 text-xs text-gray-400">
-                        {fav.items.length}
-                      </span>
-                    </div>
-                    <ul className="ml-2 mt-1 space-y-1 border-l border-gray-700 pl-4">
-                      {fav.items.length === 0 ? (
-                        <li className="text-xs italic text-gray-500">
-                          アイテムがありません
-                        </li>
-                      ) : (
-                        fav.items.map((item) => (
-                          <li
-                            key={item.id}
-                            className="text-xs text-gray-400 hover:text-yellow-400"
-                          >
-                            📄 {item.itemTitle}
-                          </li>
-                        ))
-                      )}
-                    </ul>
-                  </div>
-                ))
-              )}
+              ) : null}
             </div>
           )}
         </div>
