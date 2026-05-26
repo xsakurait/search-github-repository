@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 const mockFetch = vi.fn();
 
 vi.stubGlobal("fetch", mockFetch);
-
+// fetch関係のテスト
 describe("初期表示のfetchRepository", () => {
   it("APIが正しく呼ばれる", async () => {
     mockFetch.mockResolvedValue({
