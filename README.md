@@ -2,10 +2,26 @@ URL: https://search-github-repository-five.vercel.app
 (Vercelにデプロイ　CLIで)
 
 ## Getting Started
-
+1.install
 ```bash
-npm run dev
+# npm の場合
+npm install prisma --save-dev
+npm install @prisma/client
+
+# pnpm の場合
+pnpm add -D prisma
+pnpm add @prisma/client
 ```
+2. env.sampleをコピーし.env.local（使用する環境変数記載ファイル）作成
+```bash
+cp env.sample .env.local
+```
+3.supabase(postgresSql)データベースにテーブル作成
+```bash
+npx prisma migrate dev --name init
+```
+
+
 # 重視した１点
 実務内では状態管理等カスタムフックのみかzustandのみで実装することが多いと考えるが、使用できるということをアピールすることを重視したため似たような機能でも複数用いてアプリを構成
 
